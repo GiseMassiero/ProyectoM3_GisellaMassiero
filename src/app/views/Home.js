@@ -1,5 +1,5 @@
 // /src/app/views/Home.js
-import { navigateTo } from "../router.js";
+import { navigateTo } from "../router.js" ;
 
 // Creamos un estado local fallback en caso de que no uses una variable global,
 // o puedes cambiarlo por tu objeto de estado global si lo tienes importado.
@@ -28,19 +28,19 @@ export function Home() {
       
       <div class="characters">
         <div class="card" data-char="Mate">
-          <img src="/personajes/mate.jpg" alt="Mate" />
+          <img src="../../../public/personajes/mate.jpg" alt="Mate" />
           <div class="card-name">Mate</div>
         </div>
         <div class="card" data-char="Mcqueen">
-          <img src="/personajes/mcqueen.jpg" alt="McQueen" />
+          <img src="../../../public/personajes/mcqueen.jpg" alt="McQueen" />
           <div class="card-name">McQueen</div>
         </div>
         <div class="card" data-char="Hudson">
-          <img src="/personajes/hudson.jpg" alt="Hudson" />
+          <img src="../../../public/personajes/hudson.jpg" alt="Hudson" />
           <div class="card-name">Hudson</div>
         </div>
         <div class="card" data-char="Sally">
-          <img src="/personajes/sally.jpg" alt="Sally" />
+          <img src="../../../public/personajes/sally.jpg" alt="Sally" />
           <div class="card-name">Sally</div>
         </div>
       </div>
