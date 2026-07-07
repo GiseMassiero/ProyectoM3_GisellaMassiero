@@ -39,13 +39,14 @@ export function Chat(params) {
   viewEl.classList.add("chat"); 
 
   // 2. Inyectamos la estructura exacta de tu diseño
+  // CORRECCIÓN: Ruta de imagen apuntando a la carpeta de public /personajes/
   viewEl.innerHTML = `
     <div class="chat-layout" style="position: relative;">
       
       <button id="btnCloseChat" class="close-chat-btn" title="Cerrar chat">&times;</button>
       
       <aside class="chat-sidebar">
-        <img class="character-img" src="./src/assets/characters/${characterName.toLowerCase()}.jpg" alt="${characterName}" onerror="this.style.display='none'"/>
+        <img class="character-img" src="/personajes/${characterName.toLowerCase() === 'mcqueen' ? 'mcqueen' : characterName.toLowerCase()}.jpg" alt="${characterName}" onerror="this.style.display='none'"/>
         <h2 style="color: #ffd000; font-weight: 700; font-size: 1.6rem; text-shadow: 0 0 10px rgba(255,208,0,0.2);">${characterName}</h2>
       </aside>
 

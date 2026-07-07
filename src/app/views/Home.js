@@ -13,6 +13,7 @@ export function Home() {
   viewEl.classList.add("home-view-wrapper");
 
 // 2. Inyectamos la estructura HTML exacta acoplada al nuevo diseño horizontal y centrado
+// NOTA: Modificamos los src para que apunten a /personajes/ que está dentro de public
   viewEl.innerHTML = `
     <div class="home">
       <h1>Cars AI Chat</h1>
@@ -27,19 +28,19 @@ export function Home() {
       
       <div class="characters">
         <div class="card" data-char="Mate">
-          <img src="./src/assets/characters/mate.jpg" alt="Mate" />
+          <img src="/personajes/mate.jpg" alt="Mate" />
           <div class="card-name">Mate</div>
         </div>
         <div class="card" data-char="Mcqueen">
-          <img src="./src/assets/characters/mcqueen.jpg" alt="McQueen" />
+          <img src="/personajes/mcqueen.jpg" alt="McQueen" />
           <div class="card-name">McQueen</div>
         </div>
         <div class="card" data-char="Hudson">
-          <img src="./src/assets/characters/hudson.jpg" alt="Hudson" />
+          <img src="/personajes/hudson.jpg" alt="Hudson" />
           <div class="card-name">Hudson</div>
         </div>
         <div class="card" data-char="Sally">
-          <img src="./src/assets/characters/sally.jpg" alt="Sally" />
+          <img src="/personajes/sally.jpg" alt="Sally" />
           <div class="card-name">Sally</div>
         </div>
       </div>
