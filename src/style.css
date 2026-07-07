@@ -1,0 +1,556 @@
+/* ==========================================
+   RESET & BODY GLOBAL
+   ========================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  /* 🔥 SOLUCIÓN: El fondo se queda 100% estático atrás de toda la SPA y nunca se desplaza con el scroll */
+  background: url("./assets/backgrounds/fondo.jpg") center/cover no-repeat fixed;
+  color: white;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   NAVBAR (barra superior fija)
+   ========================================== */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 25px;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  z-index: 1000;
+}
+
+.logo {
+  color: #ffd000;
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 0 0 12px rgba(255, 208, 0, 0.6);
+}
+
+.links {
+  display: flex;
+  gap: 50px;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.link:hover {
+  color: #ffd000;
+}
+
+/* ==========================================
+   SECCIONES BASE (HOME / ABOUT / CHAT)
+   ========================================== */
+
+.home,
+.about,
+.chat {
+  min-height: 100vh;
+  padding-top: 80px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+
+  /* 🔥 SOLUCIÓN: Heredan el fondo limpio del body sin duplicarlo ni recortarlo */
+  background: transparent;
+}
+
+/* ==========================================
+   OVERLAY GLOBAL (Oscurece el fondo sutilmente)
+   ========================================== */
+
+.home::before,
+.about::before,
+.chat::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.5);
+
+  z-index: 1;
+}
+
+/* Todo el contenido siempre arriba del overlay */
+.home > *,
+.about > *,
+.chat > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================
+   HOME (UI centrada)
+   ========================================== */
+
+.home-content {
+  width: 100%;
+  max-width: 1100px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  padding: 20px;
+}
+
+/* Título Home */
+.home-content h1 {
+  font-size: 52px;
+  font-weight: 800;
+  letter-spacing: 2px;
+
+  color: #ffd000;
+
+  text-shadow:
+    0 0 10px rgba(255, 208, 0, 0.5),
+    0 0 25px rgba(255, 208, 0, 0.3);
+
+  margin-bottom: 10px;
+}
+
+/* Subtítulo Home */
+.home-content .subtitle {
+  font-size: 18px;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+/* Cards de personajes */
+.characters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.card {
+  width: 170px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 208, 0, 0.3);
+}
+
+.card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Seleccionado con glow */
+.card.selected {
+  border: 1px solid rgba(255, 208, 0, 0.6);
+
+  box-shadow:
+    0 0 10px rgba(255, 208, 0, 0.6),
+    0 0 25px rgba(255, 208, 0, 0.4),
+    0 0 40px rgba(255, 208, 0, 0.2);
+
+  transform: scale(1.05);
+}
+
+/* Botón ir al chat */
+.go-chat {
+  display: block;
+  margin: 30px auto 0 auto;
+
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+
+  cursor: not-allowed;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.go-chat.active {
+  background: #ffd000;
+  color: black;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 208, 0, 0.4);
+}
+
+/* ==========================================
+   CHAT LAYOUT (Estructura de Vidrio Esmerilado)
+   ========================================== */
+
+.chat-layout {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  height: 75vh;
+
+  margin: 20px auto;
+
+  border-radius: 18px;
+  overflow: hidden;
+
+  /* Fondo ultra-translúcido con efecto esmerilado elegante */
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+/* ==========================================
+   SIDEBAR (Tarjeta Izquierda de Personaje)
+   ========================================== */
+
+.chat-sidebar {
+  width: 240px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px; 
+  padding: 20px;
+
+  background: rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Imagen personaje */
+.character-img {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 2px solid #ffd000;
+  display: block;
+  box-shadow: 0 0 15px rgba(255, 208, 0, 0.2);
+}
+
+/* ==========================================
+   CHAT MAIN (Panel Derecho de Mensajes)
+   ========================================== */
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: transparent; 
+}
+
+/* Caja mensajes */
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  
+  /* 💡 SOLUCIÓN: Empuja todos los mensajes hacia la parte inferior del chat */
+  justify-content: flex-end; 
+  
+  gap: 12px;
+  background: transparent;
+}
+
+/* ==========================================
+   INPUT (Contenedor de envío)
+   ========================================== */
+
+.chat-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.chat-input input {
+  width: 65%;
+  max-width: 500px;
+
+  padding: 12px;
+
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  outline: none;
+
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.95rem;
+}
+
+.chat-input input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.chat-input button {
+  padding: 12px 20px;
+
+  border-radius: 10px;
+  border: none;
+
+  background: #ffd000;
+  color: black;
+
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.chat-input button:hover {
+  background: #ffb800;
+  box-shadow: 0 0 10px rgba(255, 208, 0, 0.4);
+}
+
+/* ==========================================
+   BUBBLES (Mensajes)
+   ========================================== */
+
+.bubble {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 15px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column; 
+  gap: 4px;
+  animation: fadeIn 0.25s ease;
+}
+
+.bubble.user {
+  align-self: flex-end;
+  background: linear-gradient(135deg, #ffd000, #ffb800);
+  color: black;
+  font-weight: 500;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 12px rgba(255, 208, 0, 0.15);
+}
+
+.bubble.bot {
+  align-self: flex-start;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-bottom-left-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bubble-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* La hora del usuario, ultra pequeña y delicada abajo a la derecha */
+.bubble .time {
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.5); /* Color gris oscuro delicado sobre el fondo amarillo */
+  align-self: flex-end;
+  margin-top: 2px;
+}
+
+/* Indicador de "Escribiendo..." animado */
+.typing-indicator {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.6);
+  display: inline-block;
+  animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ==========================================
+   ABOUT (Diseño estilizado con sombras Pro)
+   ========================================== */
+
+.about-content {
+  width: 90%;
+  max-width: 750px;
+  margin-top: 40px;
+
+  /* Efecto Glassmorphism refinado, alineado a la estética del grupo */
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: 35px;
+  border-radius: 20px;
+  text-align: center;
+  
+  /* Borde sutil y sombra con resplandor neón amarillo de competición */
+  border: 1px solid rgba(255, 208, 0, 0.2);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 208, 0, 0.15);
+}
+
+.about-content h1 {
+  color: #ffd000;
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255, 208, 0, 0.3);
+}
+
+.about-content p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #e0e0e0;
+}
+
+.about-content ul {
+  text-align: left;
+  max-width: 400px;
+  margin: 20px auto;
+  padding-left: 20px;
+}
+
+.about-content li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #f0f0f0;
+  list-style-type: square;
+}
+
+.about-content li::marker {
+  color: #ffd000; /* Viñetas amarillas combinadas */
+}
+
+/* 🌟 LA ÚLTIMA FRASE DESTACADA (En amarillo fuerte y con sombra de velocidad) */
+.about-content .highlight {
+  font-size: 1.3rem;
+  font-weight: bold;
+  font-style: italic;
+  color: #ffd000 !important; /* Fuerza el amarillo brillante solicitado */
+  margin-top: 30px;
+  text-shadow: 
+    0 0 8px rgba(255, 208, 0, 0.6),
+    0 0 20px rgba(255, 208, 0, 0.3);
+}
+
+/* ==========================================
+   RESPONSIVE (DISEÑO MOBILE-FIRST)
+   ========================================== */
+
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column; /* Apila sidebar arriba y chat abajo en tablets/móviles */
+    height: 80vh;
+  }
+  
+  .chat-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 10px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .character-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+  }
+
+  .home-content h1 {
+    font-size: 36px;
+  }
+
+  .links {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bubble {
+    max-width: 85%; /* Las burbujas usan más espacio en pantallas chicas */
+  }
+  
+  .chat-input input {
+    width: 60%;
+  }
+
+  .about-content {
+    padding: 20px;
+  }
+  
+  .about-content h1 {
+    font-size: 1.7rem;
+  }
+}
+/* Botón para cerrar el chat y volver a la Home */
+.close-chat-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+/* Efecto Hover limpio en CSS */
+.close-chat-btn:hover {
+  background: rgba(255, 0, 0, 0.6);
+  border-color: transparent;
+  transform: scale(1.05);
+}
