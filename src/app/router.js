@@ -14,7 +14,7 @@ export function router() {
   const root = document.getElementById("view");
   if (!root) return;
 
-  // 1. LIMPIEZA TOTAL: Vaciamos por completo el contenedor antes de renderizar
+  // 1. LIMPIEZA TOTAL
   root.innerHTML = "";
 
   const path = location.pathname;
@@ -24,14 +24,13 @@ export function router() {
   // Seleccionamos la función de la vista correspondiente (fallback a Home)
   const PageView = routes[path] || Home;
 
-  // 2. EJECUCIÓN: Obtenemos el nodo del DOM real que construyó la vista
+  // 2. EJECUCIÓN
   const pageElement = PageView(params);
 
-  // 3. RENDER: Lo inyectamos de forma segura mediante appendChild
+  // 3. RENDER SECURE
   if (pageElement instanceof HTMLElement) {
     root.appendChild(pageElement);
   } else {
-    // Salvavidas por si alguna vista temporalmente devuelve un string HTML
     root.innerHTML = pageElement;
   }
 }
@@ -42,6 +41,19 @@ export function navigateTo(path, searchParams = "") {
   window.history.pushState({}, "", url);
   router(); // Disparamos el renderizado sincrónicamente
 }
+
+// 🛡️ MANEJADOR DE CLICS SPA: Intercepta enlaces para evitar recargas completas (F5)
+document.addEventListener("click", (e) => {
+  // Buscamos si el elemento clickeado (o alguno de sus padres) es un enlace con atributo data-link o una ruta local
+  const anchor = e.target.closest("a");
+  
+  if (anchor && anchor.href && anchor.host === location.host) {
+    e.preventDefault(); // Frenamos la recarga nativa del navegador
+    const path = anchor.pathname;
+    const search = anchor.search.substring(1); // Quitamos el "?" si existe
+    navigateTo(path, search);
+  }
+});
 
 // Escuchamos de forma nativa las flechas de navegación del cliente (Back/Forward)
 window.addEventListener("popstate", router);

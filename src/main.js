@@ -19,8 +19,9 @@ function init() {
   viewContainer.id = "view";
   app.appendChild(viewContainer);
 
-  // 4. Ejecutamos el enrutador para pintar la vista correspondiente
+  // 4. Ejecutamos el enrutador para pintar la vista correspondiente por primera vez
   router();
 }
 
+// Un solo listener para inicializar todo cuando el DOM esté listo
 window.addEventListener("DOMContentLoaded", init);

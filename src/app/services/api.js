@@ -5,37 +5,33 @@
  * @param {string} character - El personaje activo (mate, sally, mcqueen, hudson)
  * @returns {Promise<Object>} Objeto con la respuesta formateada: { reply: "texto" }
  */
-export async function sendMessage(messagesHistory, character) {
-  try {
-    const key = (character || "mate").toLowerCase().trim();
+// /src/app/services/api.js
 
-    // 💡 REQUISITO DE RÚBRICA: Le pegamos a nuestra Serverless Function interna.
-    // De esta manera la API Key se queda en el servidor y NUNCA se expone en el cliente.
+export async function sendMessage(messagesHistorial, character) {
+  try {
     const response = await fetch("/api/functions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: messagesHistory, // 💡 Mandamos TODO el historial completo para que tenga memoria
-        character: key,
+        messages: messagesHistorial,
+        character: character,
       }),
     });
 
+    // Control estricto de errores para que coincida con tu test unitario
     if (!response.ok) {
       throw new Error(`Error en el servidor: ${response.status}`);
     }
 
     const data = await response.json();
-
-    // Retornamos el objeto estructurado exactamente como lo espera tu Chat.js
-    return {
-      reply: data.reply || "Lo siento, no puedo responder en este momento.",
-    };
+    
+    // 💡 Devolvemos directamente la propiedad reply (el texto de Gemini)
+    return data.reply; 
 
   } catch (error) {
-    console.error("Error en api.js:", error);
-    // Relanzamos el error para que Chat.js lo capture en su bloque catch y dibuje el estado visual de error
-    throw error; 
+    console.error("Error en sendMessage:", error);
+    throw error;
   }
 }

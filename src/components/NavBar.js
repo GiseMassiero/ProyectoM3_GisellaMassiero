@@ -1,3 +1,5 @@
+// Importamos la imagen saliendo correctamente a la carpeta src
+import logoUrl from '../assets/logo/logo.jpg';
 // /src/components/NavBar.js
 import { navigateTo } from "../app/router.js"; 
 
@@ -6,10 +8,11 @@ export function NavBar() {
   const headerEl = document.createElement("header");
   headerEl.classList.add("navbar");
 
-  // 2. Inyectamos la estructura con rutas limpias
+
+// 2. Inyectamos la estructura usando la variable del import
   headerEl.innerHTML = `
-    <div class="logo">
-      Cars AI Chat
+    <div class="navbar-brand">
+      <img src="${logoUrl}" alt="Cars AI Chat Logo" class="logo-img">
     </div>
     <nav class="links">
       <a href="/home" class="link">Home</a>

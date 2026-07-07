@@ -1,50 +1,62 @@
 // /src/app/views/Home.js
-import { state } from "../state/state.js";
-import { navigateTo } from "../router.js"; // 🌟 Asegúrate de que la ruta sea correcta según tu estructura (ej: "./app/router.js" o "../router.js")
+import { navigateTo } from "../router.js";
+
+// Creamos un estado local fallback en caso de que no uses una variable global,
+// o puedes cambiarlo por tu objeto de estado global si lo tienes importado.
+const localState = {
+  selectedCharacter: null
+};
 
 export function Home() {
   // 1. Creamos el contenedor del DOM real en memoria
   const viewEl = document.createElement("div");
   viewEl.classList.add("home-view-wrapper");
 
-  // 2. Inyectamos tu estructura HTML exacta
+// 2. Inyectamos la estructura HTML exacta acoplada al nuevo diseño horizontal y centrado
   viewEl.innerHTML = `
     <div class="home">
-      <div class="home-content">
-        <h1>Cars AI Chat</h1>
-        <p class="subtitle">Elige con quién quieres conversar</p>
-
-        <div class="characters">
-          <div class="card" data-char="Mate">
-            <img src="./src/assets/characters/mate.jpg" />
-            <h3>Mate</h3>
-          </div>
-          <div class="card" data-char="Mcqueen">
-            <img src="./src/assets/characters/mcqueen.jpg" />
-            <h3>McQueen</h3>
-          </div>
-          <div class="card" data-char="Hudson">
-            <img src="./src/assets/characters/hudson.jpg" />
-            <h3>Hudson</h3>
-          </div>
-          <div class="card" data-char="Sally">
-            <img src="./src/assets/characters/sally.jpg" />
-            <h3>Sally</h3>
-          </div>
-        </div>
-
-        <button id="chatBtn" class="go-chat" disabled>
-          Selecciona un personaje
-        </button>
+      <h1>Cars AI Chat</h1>
+      
+      <div class="home-intro-wide">
+        <p class="intro-text">
+          Te damos la bienvenida al centro de comando avanzado. Esta aplicación es una <strong class="highlight">SPA (Single Page Application)</strong> diseñada para simular transmisiones en tiempo real con los personajes más icónicos del universo de Cars.
+        </p>
       </div>
+
+      <p class="subtitle">Elige a tu corredor favorito para conversar</p>
+      
+      <div class="characters">
+        <div class="card" data-char="Mate">
+          <img src="./src/assets/characters/mate.jpg" alt="Mate" />
+          <div class="card-name">Mate</div>
+        </div>
+        <div class="card" data-char="Mcqueen">
+          <img src="./src/assets/characters/mcqueen.jpg" alt="McQueen" />
+          <div class="card-name">McQueen</div>
+        </div>
+        <div class="card" data-char="Hudson">
+          <img src="./src/assets/characters/hudson.jpg" alt="Hudson" />
+          <div class="card-name">Hudson</div>
+        </div>
+        <div class="card" data-char="Sally">
+          <img src="./src/assets/characters/sally.jpg" alt="Sally" />
+          <div class="card-name">Sally</div>
+        </div>
+      </div>
+
+      <button id="chatBtn" class="go-chat" disabled>
+        Selecciona un personaje
+      </button>
     </div>
   `;
 
-  // 3. LÓGICA DE EVENTOS (Se ejecuta directo acá adentro sobre el elemento creado)
+  // 3. LÓGICA DE EVENTOS (Intacta y funcional)
   const cards = viewEl.querySelectorAll(".card");
-  const btn = viewEl.getElementById ? viewEl.getElementById("chatBtn") : viewEl.querySelector("#chatBtn");
+  const btn = viewEl.querySelector("#chatBtn");
 
-  let selected = state.selectedCharacter;
+  // Si tienes un objeto global llamado 'state', usa ese, si no, usa el fallback localState
+  const currentState = typeof state !== "undefined" ? state : localState;
+  let selected = currentState.selectedCharacter;
 
   const updateButton = () => {
     if (!selected) {
@@ -54,14 +66,16 @@ export function Home() {
     } else {
       btn.disabled = false;
       btn.classList.add("active");
-      btn.textContent = `Ir al chat con ${selected}`;
+      // Formateamos el nombre para que se vea más lindo en el botón
+      const displayName = selected === "Mcqueen" ? "McQueen" : selected;
+      btn.textContent = `Ir al chat con ${displayName}`;
     }
   };
 
   cards.forEach(card => {
     const char = card.dataset.char;
 
-    // Restaurar selección visual si existe en el estado global
+    // Restaurar selección visual si existe en el estado
     if (selected === char) {
       card.classList.add("selected");
     }
@@ -69,11 +83,11 @@ export function Home() {
     card.addEventListener("click", () => {
       if (selected === char) {
         selected = null;
-        state.selectedCharacter = null;
+        currentState.selectedCharacter = null;
         card.classList.remove("selected");
       } else {
         selected = char;
-        state.selectedCharacter = char;
+        currentState.selectedCharacter = char;
 
         cards.forEach(c => c.classList.remove("selected"));
         card.classList.add("selected");
@@ -84,7 +98,7 @@ export function Home() {
 
   btn.addEventListener("click", () => {
     if (!selected) return;
-    // Navegación limpia por History API sin Hashes
+    // Navegación limpia por History API hacia el Chat
     navigateTo("/chat", `character=${selected}`);
   });
 

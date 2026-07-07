@@ -1,20 +1,31 @@
 // /src/app/views/Chat.js
 import { state } from "../state/state.js";
-import { navigateTo } from "../router.js"; // 👈 Agregado: Importación para poder navegar a la Home
+import { navigateTo } from "../router.js"; 
 
-// 🌟 IMPORTACIONES DE DATOS: Apuntamos a tu carpeta real 'services'
-import { mockSendMessage } from "../services/MockAI.js"; 
-// import { sendMessageToGemini } from "../services/api.js";
+// 🚀 IMPORTACIONES REALES: Conexión directa a producción
+import { sendMessage } from "../services/api.js"; 
+// import { mockSendMessage } from "../services/MockAI.js"; // 🏁 MODO MOCK DESACTIVADO PARA EL EXAMEN
 
 export function Chat(params) {
   // Obtenemos el personaje desde los parámetros de la URL (?character=Mate)
   const characterName = params.get("character") || state.selectedCharacter || "Personaje";
 
+  // 🏎️ Mapeo de saludos dinámicos según el personaje
+  const characterGreetings = {
+    "Mcqueen": "¡¡¡Cuchau!!! Soy el Rayo McQueen. ¿Listo para correr una carrera de charlas a toda velocidad?",
+    "Mate": "¡Hola, soy Mate! Como el tomate, pero sin el 'to'. ¡Preparate para una charla sobre ruedas!",
+    "Sally": "¡Hola! Soy Sally. Bienvenida a Radiador Springs. ¿Lista para dar un paseo tranquilo y charlar un rato?",
+    "Doc": "Soy el Doc Hudson. Más vale que tengas los neumáticos bien inflados si vas a charlar conmigo, novato."
+  };
+
+  // Buscamos el saludo según el nombre (y si por alguna razón no coincide, usa el genérico por defecto)
+  const greetingText = characterGreetings[characterName] || `¡Hola! Soy ${characterName}. ¿Listo para correr una carrera de charlas?`;
+
   const localState = {
     messages: [
       {
         role: "bot",
-        text: `¡Hola! Soy ${characterName}. ¿Listo para correr una carrera de charlas?`,
+        text: greetingText,
         time: getTime(),
         typing: false
       }
@@ -27,7 +38,7 @@ export function Chat(params) {
   const viewEl = document.createElement("div");
   viewEl.classList.add("chat"); 
 
-  // 2. Inyectamos la estructura exacta de tu diseño (Con la cruz y su tooltip)
+  // 2. Inyectamos la estructura exacta de tu diseño
   viewEl.innerHTML = `
     <div class="chat-layout" style="position: relative;">
       
@@ -35,7 +46,7 @@ export function Chat(params) {
       
       <aside class="chat-sidebar">
         <img class="character-img" src="./src/assets/characters/${characterName.toLowerCase()}.jpg" alt="${characterName}" onerror="this.style.display='none'"/>
-        <h2>${characterName}</h2>
+        <h2 style="color: #ffd000; font-weight: 700; font-size: 1.6rem; text-shadow: 0 0 10px rgba(255,208,0,0.2);">${characterName}</h2>
       </aside>
 
       <main class="chat-main">
@@ -158,15 +169,17 @@ export function Chat(params) {
 
   // 🌟 PUENTE CONMUTABLE (MOCK VS REAL)
   async function getAIResponse(history, char) {
-    // 🏁 MODO INTERNO ACTIVO: Consume tu mockAI.js
+    /* // 🏁 MODO INTERNO INACTIVO
     const lastUserText = history[history.length - 1].text;
     const mockReply = await mockSendMessage(lastUserText, char);
     return mockReply;
-
-    /* // 🚀 MODO PRODUCCIÓN (Descomentar el día del deploy)
-    const result = await sendMessageToGemini(history, char);
-    return typeof result === "string" ? result : result?.reply;
     */
+
+    // 🚀 MODO PRODUCCIÓN REAL ACTIVADO: Conectado a /api/functions a través de api.js
+    const reply = await sendMessage(history, char);
+    
+    // Como tu api.js corregido ya te da la respuesta filtrada como un string, la mandamos directa
+    return reply || "No entendí eso 😅";
   }
 
   // Renderizamos los mensajes iniciales inmediatamente
