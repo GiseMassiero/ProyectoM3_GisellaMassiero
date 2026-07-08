@@ -20,25 +20,26 @@ export default async function handler(req, res) {
       return res.status(500).json({ reply: "Falta configuración de API" });
     }
 
-    // Aseguramos que el historial sea válido
     const formattedContents = (messages || []).map((m) => ({
       role: m.role === "user" ? "user" : "model",
       parts: [{ text: m.text || "" }]
     }));
 
-    // IMPORTANTE: Gemini falla si el primer mensaje en 'contents' es 'model'. 
-    // Si el historial empieza con model, lo filtramos o lo ajustamos.
+    // Corrección crítica: Gemini requiere que el historial no empiece con 'model'
     const validContents = formattedContents.length > 0 && formattedContents[0].role === 'model' 
       ? formattedContents.slice(1) 
       : formattedContents;
 
+    // Usamos el modelo 'gemini-1.5-flash' con la sintaxis correcta para la API
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          system_instruction: { // Cambio clave: el nombre del campo suele ser con guion bajo
+          // Movemos la instrucción dentro de 'contents' si el modelo no acepta 'system_instruction' por separado
+          // o usamos el formato correcto de configuración de sistema
+          system_instruction: {
             parts: [{ text: systemInstructionText }]
           },
           contents: validContents,
@@ -52,8 +53,8 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Error de Gemini:", JSON.stringify(errorData));
-      return res.status(500).json({ reply: "Error al consultar a Hudson 🛠️" });
+      console.error("Error detallado de Gemini:", JSON.stringify(errorData));
+      return res.status(500).json({ reply: "Error en la comunicación con el servidor (API)" });
     }
 
     const data = await response.json();
