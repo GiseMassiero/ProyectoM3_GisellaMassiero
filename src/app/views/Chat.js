@@ -131,17 +131,19 @@ export function Chat(params) {
     renderMessages();
 
     try {
-      // 🌟 INTERRUPTOR SEGURO: Llama a la función puente de abajo
-      const reply = await getAIResponse(cleanHistory, characterName);
+ const replyObj = await getAIResponse(cleanHistory, characterName);
 
-      if (!reply) throw new Error("Respuesta inválida");
+if (!replyObj) throw new Error("Respuesta inválida");
 
-      localState.messages[botMessageIndex] = {
-        role: "bot",
-        text: reply,
-        time: getTime(),
-        typing: false,
-      };
+// EXTRAEMOS EL TEXTO DEL OBJETO 
+const textoRespuesta = replyObj.content[0].text; 
+
+localState.messages[botMessageIndex] = {
+  role: "bot",
+  text: textoRespuesta, // <--- Aquí usamos el texto extraído
+  time: getTime(),
+  typing: false,
+};
     } catch (error) {
       localState.messages[botMessageIndex] = {
         role: "bot",

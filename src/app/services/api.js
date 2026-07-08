@@ -6,6 +6,7 @@
  * @returns {Promise<Object>} Objeto con la respuesta formateada: { reply: "texto" }
  */
 // /src/app/services/api.js
+import { createChatResponse } from '../utils/helpers';
 
 export async function sendMessage(messagesHistorial, character) {
   try {
@@ -27,8 +28,15 @@ export async function sendMessage(messagesHistorial, character) {
 
     const data = await response.json();
     
-    // 💡 Devolvemos directamente la propiedad reply (el texto de Gemini)
-    return data.reply; 
+    const respuestaFormateada = createChatResponse({
+      text: data.reply,
+      payload: messagesHistorial, // Pasamos el historial como payload
+      finishReason: 'STOP',       // Asumimos éxito por defecto
+      usage: null                 // O puedes pasar el objeto de uso si el server lo envía
+    });
+
+    // 3. Retornamos el objeto completo formateado
+    return respuestaFormateada; 
 
   } catch (error) {
     console.error("Error en sendMessage:", error);

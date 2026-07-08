@@ -1,3 +1,4 @@
+
 export default async function handler(req, res) {
   // 1. Validar método
   if (req.method !== "POST") {
@@ -54,12 +55,48 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
+    // 1. Extraemos los datos necesarios
+    const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
+    const finishReason = data?.candidates?.[0]?.finishReason || "STOP";
+    const usage = data?.usageMetadata; // Gemini suele devolver esto
 
-    res.status(200).json({ reply });
+    // 2. Creamos la respuesta con el formato del profesor
+    const finalResponse = createChatResponse({
+      text: replyText,
+      payload: formattedContents,
+      finishReason: finishReason,
+      usage: {
+        promptTokenCount: usage?.promptTokenCount,
+        candidatesTokenCount: usage?.candidatesTokenCount
+      }
+    });
+
+    // 3. Enviamos el objeto formateado en lugar de solo { reply: ... }
+    res.status(200).json(finalResponse);
 
   } catch (error) {
-    console.error("Error crítico:", error);
-    res.status(500).json({ reply: "Error interno del servidor." });
+    // ...
   }
+}
+
+function mapStopReason(reason) {
+  switch (reason) {
+    case 'MAX_TOKENS': return 'max_tokens';
+    case 'STOP': return 'end_turn';
+    default: return 'end_turn';
+  }
+}
+
+function createChatResponse({ text, payload, finishReason, usage }) {
+  return {
+    id: `msg_gemini_${Date.now()}`,
+    type: 'message',
+    role: 'assistant',
+    content: [{ type: 'text', text }],
+    stop_reason: mapStopReason(finishReason),
+    usage: {
+      input_tokens: usage?.promptTokenCount ?? 0,
+      output_tokens: usage?.candidatesTokenCount ?? 0,
+    },
+  };
 }
