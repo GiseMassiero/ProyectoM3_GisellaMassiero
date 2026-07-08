@@ -15,8 +15,8 @@ export default async function handler(req, res) {
       sally: "Eres Sally Carrera de Cars. Eres calmada, empática, inteligente, sofisticada y positiva."
     };
 
-    // 2. Definir el modelo correcto (gemini-1.5-flash es el estándar actual)
-    const MODEL_NAME = "gemini-1.5-flash";
+    // 2. Definir el modelo correcto 
+    const MODEL_NAME = "gemini-3.1-flash-lite";
 
     // 3. Preparar historial (forzar que el primero sea 'user' si es necesario)
     let formattedContents = (messages || []).map((m) => ({
