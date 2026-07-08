@@ -395,11 +395,12 @@ body::before {
   height: 100%;         /* Asegura que tome toda la altura disponible */
   min-height: 0;        /* Vital para evitar errores en flexbox */
   padding: 20px;
+  overflow: hidden;
 }
 
 /* Caja donde aparecen los mensajes */
 .chat-box {
-  flex: 1;              /* ¡ESTO ES LO QUE FALTA! Estira la caja al máximo espacio posible */
+  flex: 1 1 auto;              /* ¡ESTO ES LO QUE FALTA! Estira la caja al máximo espacio posible */
   min-height: 0;        /* Permite que la caja se encoja si es necesario */
   width: 100%;
   overflow-y: auto;     /* Activa el scroll cuando el contenido supere el espacio */
