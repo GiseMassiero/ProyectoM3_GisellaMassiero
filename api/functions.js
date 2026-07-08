@@ -4,11 +4,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const body = typeof req.body === "string"
-      ? JSON.parse(req.body)
-      : req.body;
-
-    // 💡 SOLUCIÓN: Cambiamos "message" por "messages" (el array que manda el frontend)
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
     const { messages, character } = body;
 
     const systemPrompts = {
@@ -21,36 +17,31 @@ export default async function handler(req, res) {
     const systemInstructionText = systemPrompts[character?.toLowerCase()] || systemPrompts.mate;
 
     if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ reply: "Falta GEMINI_API_KEY en las variables de entorno" });
+      return res.status(500).json({ reply: "Falta configuración de API" });
     }
 
-    // 💡 REQUISITO DE RÚBRICA: Transformamos tu historial interno al formato oficial de Gemini (user / model)
-    const formattedContents = (messages || []).map((m) => {
-      return {
-        role: m.role === "user" ? "user" : "model",
-        parts: [{ text: m.text }]
-      };
-    });
+    // Aseguramos que el historial sea válido
+    const formattedContents = (messages || []).map((m) => ({
+      role: m.role === "user" ? "user" : "model",
+      parts: [{ text: m.text || "" }]
+    }));
 
-    // Si por alguna razón el historial llegó vacío, creamos al menos un contenido inicial de respaldo
-    if (formattedContents.length === 0) {
-      formattedContents.push({ role: "user", parts: [{ text: "Hola" }] });
-    }
+    // IMPORTANTE: Gemini falla si el primer mensaje en 'contents' es 'model'. 
+    // Si el historial empieza con model, lo filtramos o lo ajustamos.
+    const validContents = formattedContents.length > 0 && formattedContents[0].role === 'model' 
+      ? formattedContents.slice(1) 
+      : formattedContents;
 
- const response = await fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`,
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-goog-api-key": process.env.GEMINI_API_KEY // <--- ¡AQUÍ ESTÁ EL TRUCO!
-    },
-    body: JSON.stringify({
-          // 💡 Enviamos el System Prompt de forma limpia y aislada usando la propiedad oficial
-          systemInstruction: {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system_instruction: { // Cambio clave: el nombre del campo suele ser con guion bajo
             parts: [{ text: systemInstructionText }]
           },
-          contents: formattedContents, // Enviamos toda la conversación estructurada
+          contents: validContents,
           generationConfig: {
             temperature: character?.toLowerCase() === "mate" ? 0.9 : 0.6,
             maxOutputTokens: 400
@@ -60,22 +51,18 @@ export default async function handler(req, res) {
     );
 
     if (!response.ok) {
-      const err = await response.text();
-      return res.status(500).json({ reply: "Error Gemini API", detail: err });
+      const errorData = await response.json();
+      console.error("Error de Gemini:", JSON.stringify(errorData));
+      return res.status(500).json({ reply: "Error al consultar a Hudson 🛠️" });
     }
 
     const data = await response.json();
-
-    const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
-      "No entendí eso 😅";
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No obtuve respuesta.";
 
     res.status(200).json({ reply });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      reply: "Error conectando con Gemini 😢"
-    });
+    console.error("Error crítico:", error);
+    res.status(500).json({ reply: "Error interno del servidor" });
   }
 }
