@@ -35,7 +35,7 @@ export function Chat(params) {
   viewEl.classList.add("chat");
 
   viewEl.innerHTML = `
-    <div class="chat-layout" style="position: relative;">
+    <div class="chat-layout">
       <button id="btnCloseChat" class="close-chat-btn" title="Cerrar chat">&times;</button>
       <aside class="chat-sidebar">
         <img class="character-img" src="/personajes/${characterName.toLowerCase() === 'mcqueen' ? 'mcqueen' : characterName.toLowerCase()}.jpg" alt="${characterName}" onerror="this.style.display='none'"/>
