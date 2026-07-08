@@ -406,10 +406,12 @@ body::before {
   overflow-y: auto;     /* Activa el scroll cuando el contenido supere el espacio */
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* Alinea los mensajes al fondo */
   gap: 16px;
   padding-right: 10px;
   margin-bottom: 15px;  /* Espacio antes del input */
+}
+.chat-box > :first-child{
+  margin-top: auto;
 }
 
 .chat-box::-webkit-scrollbar {
