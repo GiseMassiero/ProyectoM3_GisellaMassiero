@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   // 1. Validar método
   if (req.method !== "POST") {
@@ -16,23 +15,19 @@ export default async function handler(req, res) {
       sally: "Eres Sally Carrera de Cars. Eres calmada, empática, inteligente, sofisticada y positiva."
     };
 
-    // 2. Definir el modelo correcto 
     const MODEL_NAME = "gemini-3.1-flash-lite";
 
-    // 3. Preparar historial (forzar que el primero sea 'user' si es necesario)
     let formattedContents = (messages || []).map((m) => ({
       role: m.role === "user" ? "user" : "model",
       parts: [{ text: m.text || "" }]
     }));
 
-    // Insertar el system prompt al inicio como el primer mensaje del usuario para asegurar contexto
     const systemInstructionText = systemPrompts[character?.toLowerCase()] || systemPrompts.mate;
     formattedContents.unshift({
       role: "user",
       parts: [{ text: `INSTRUCCIÓN DE SISTEMA: ${systemInstructionText}. (Responde siempre bajo este rol).` }]
     });
 
-    // 4. Llamada a la API
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
@@ -55,30 +50,29 @@ export default async function handler(req, res) {
     }
 
     const data = await response.json();
-    // 1. Extraemos los datos necesarios
     const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
-    const finishReason = data?.candidates?.[0]?.finishReason || "STOP";
-    const usage = data?.usageMetadata; // Gemini suele devolver esto
-
+    
     // 2. Creamos la respuesta con el formato del profesor
     const finalResponse = createChatResponse({
       text: replyText,
       payload: formattedContents,
-      finishReason: finishReason,
-      usage: {
-        promptTokenCount: usage?.promptTokenCount,
-        candidatesTokenCount: usage?.candidatesTokenCount
-      }
+      finishReason: data?.candidates?.[0]?.finishReason || 'STOP',
+      usage: data?.usageMetadata
     });
 
-    // 3. Enviamos el objeto formateado en lugar de solo { reply: ... }
-    res.status(200).json(finalResponse);
+    // 3. Enviamos el formato nuevo Y MANTENEMOS 'reply' para no romper el frontend
+    res.status(200).json({ 
+      ...finalResponse,
+      reply: replyText 
+    });
 
   } catch (error) {
-    // ...
+    console.error("Error crítico:", error);
+    res.status(500).json({ reply: "Error interno del servidor." });
   }
 }
 
+// Funciones auxiliares
 function mapStopReason(reason) {
   switch (reason) {
     case 'MAX_TOKENS': return 'max_tokens';

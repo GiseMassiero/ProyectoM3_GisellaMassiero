@@ -5,8 +5,10 @@
  * @param {string} character - El personaje activo (mate, sally, mcqueen, hudson)
  * @returns {Promise<Object>} Objeto con la respuesta formateada: { reply: "texto" }
  */
-// /src/app/services/api.js
+
 import { createChatResponse } from '../utils/helpers';
+
+// /src/app/services/api.js
 
 export async function sendMessage(messagesHistorial, character) {
   try {
@@ -21,22 +23,17 @@ export async function sendMessage(messagesHistorial, character) {
       }),
     });
 
-    // Control estricto de errores para que coincida con tu test unitario
     if (!response.ok) {
       throw new Error(`Error en el servidor: ${response.status}`);
     }
 
+    // Recibimos el objeto híbrido completo del backend
     const data = await response.json();
     
-    const respuestaFormateada = createChatResponse({
-      text: data.reply,
-      payload: messagesHistorial, // Pasamos el historial como payload
-      finishReason: 'STOP',       // Asumimos éxito por defecto
-      usage: null                 // O puedes pasar el objeto de uso si el server lo envía
-    });
-
-    // 3. Retornamos el objeto completo formateado
-    return respuestaFormateada; 
+    // Devolvemos el objeto directamente. 
+    // Como data ahora contiene 'content', 'id', 'usage' y 'reply', 
+    // tu Chat.js tendrá todo lo que necesita.
+    return data; 
 
   } catch (error) {
     console.error("Error en sendMessage:", error);

@@ -179,10 +179,10 @@ localState.messages[botMessageIndex] = {
     */
 
     // 🚀 MODO PRODUCCIÓN REAL ACTIVADO: Conectado a /api/functions a través de api.js
-    const reply = await sendMessage(history, char);
+    const replyData = await sendMessage(history, char);
     
     // Como tu api.js corregido ya te da la respuesta filtrada como un string, la mandamos directa
-    return reply || "No entendí eso 😅";
+    return replyData;
   }
 
   // Renderizamos los mensajes iniciales inmediatamente
