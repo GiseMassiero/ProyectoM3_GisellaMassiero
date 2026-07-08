@@ -25,20 +25,16 @@ export default async function handler(req, res) {
       parts: [{ text: m.text || "" }]
     }));
 
-    // Corrección crítica: Gemini requiere que el historial no empiece con 'model'
     const validContents = formattedContents.length > 0 && formattedContents[0].role === 'model' 
       ? formattedContents.slice(1) 
       : formattedContents;
 
-    // Usamos el modelo 'gemini-1.5-flash' con la sintaxis correcta para la API
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // Movemos la instrucción dentro de 'contents' si el modelo no acepta 'system_instruction' por separado
-          // o usamos el formato correcto de configuración de sistema
           system_instruction: {
             parts: [{ text: systemInstructionText }]
           },
@@ -53,12 +49,12 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Error detallado de Gemini:", JSON.stringify(errorData));
-      return res.status(500).json({ reply: "Error en la comunicación con el servidor (API)" });
+      console.error("Error de Gemini:", JSON.stringify(errorData));
+      return res.status(500).json({ reply: "Error al consultar a Hudson" });
     }
 
     const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No obtuve respuesta.";
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor!";
 
     res.status(200).json({ reply });
 
