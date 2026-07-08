@@ -74,8 +74,10 @@ export function Chat(params) {
       }
       chatBox.appendChild(bubble);
     });
+   
+    requestAnimationFrame(() => {
     chatBox.scrollTop = chatBox.scrollHeight;
-
+});
   }
 
   async function handleSend() {
