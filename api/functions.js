@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  // 1. Validar método
   if (req.method !== "POST") {
     return res.status(405).json({ reply: "Method not allowed" });
   }
@@ -14,34 +15,33 @@ export default async function handler(req, res) {
       sally: "Eres Sally Carrera de Cars. Eres calmada, empática, inteligente, sofisticada y positiva."
     };
 
-    const systemInstructionText = systemPrompts[character?.toLowerCase()] || systemPrompts.mate;
+    // 2. Definir el modelo correcto (gemini-1.5-flash es el estándar actual)
+    const MODEL_NAME = "gemini-1.5-flash";
 
-    if (!process.env.GEMINI_API_KEY) {
-      return res.status(500).json({ reply: "Falta configuración de API" });
-    }
-
-    const formattedContents = (messages || []).map((m) => ({
+    // 3. Preparar historial (forzar que el primero sea 'user' si es necesario)
+    let formattedContents = (messages || []).map((m) => ({
       role: m.role === "user" ? "user" : "model",
       parts: [{ text: m.text || "" }]
     }));
 
-    const validContents = formattedContents.length > 0 && formattedContents[0].role === 'model' 
-      ? formattedContents.slice(1) 
-      : formattedContents;
+    // Insertar el system prompt al inicio como el primer mensaje del usuario para asegurar contexto
+    const systemInstructionText = systemPrompts[character?.toLowerCase()] || systemPrompts.mate;
+    formattedContents.unshift({
+      role: "user",
+      parts: [{ text: `INSTRUCCIÓN DE SISTEMA: ${systemInstructionText}. (Responde siempre bajo este rol).` }]
+    });
 
-      const modelName = "gemini-1.5-flash"; 
-const response = await fetch(
- `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      // Si el modelo da 404, prueba quitando system_instruction temporalmente
-      // y mueve esa instrucción al inicio de 'contents'
-      contents: validContents, 
-      generationConfig: {
-        temperature: character?.toLowerCase() === "mate" ? 0.9 : 0.6,
-        maxOutputTokens: 400
+    // 4. Llamada a la API
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: formattedContents,
+          generationConfig: {
+            temperature: character?.toLowerCase() === "mate" ? 0.9 : 0.6,
+            maxOutputTokens: 400
           }
         })
       }
@@ -49,17 +49,17 @@ const response = await fetch(
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.error("Error de Gemini:", JSON.stringify(errorData));
-      return res.status(500).json({ reply: "Error al consultar a Hudson" });
+      console.error("Error de API:", JSON.stringify(errorData));
+      return res.status(500).json({ reply: "Fallo de motor en la conexión con el servidor." });
     }
 
     const data = await response.json();
-    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor!";
+    const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
 
     res.status(200).json({ reply });
 
   } catch (error) {
     console.error("Error crítico:", error);
-    res.status(500).json({ reply: "Error interno del servidor" });
+    res.status(500).json({ reply: "Error interno del servidor." });
   }
 }
