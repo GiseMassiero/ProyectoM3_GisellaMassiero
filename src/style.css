@@ -416,11 +416,13 @@ body::before {
 }
 
 .chat-box::-webkit-scrollbar {
-  width: 8%;
-  background: rgba(0, 0, 0, 0.2);
+  width: 8px;
+  
 }
 .chat-box::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+
 }
 
 .chat-box::-webkit-scrollbar-thumb {
