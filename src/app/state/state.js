@@ -1,16 +1,21 @@
+// /src/state/state.js
 export const state = {
-  // Personaje seleccionado en Home
   selectedCharacter: null,
+  
+  // Usamos un objeto para indexar historiales: { "Mcqueen": [], "Mate": [] }
+  histories: {},
 
-  // Personaje que está usando el chat
-  currentCharacter: null,
-
-  // Historial de conversación
-  messages: [],
-
-  // Estado de la petición a la IA
+  // Estado de UI global
   loading: false,
+  error: null,
 
-  // Mensaje de error (si ocurre alguno)
-  error: null
+  // Helper para obtener el historial del personaje actual
+  getMessages(characterName) {
+    return this.histories[characterName] || [];
+  },
+
+  // Helper para actualizar el historial
+  setMessages(characterName, messages) {
+    this.histories[characterName] = messages;
+  }
 };

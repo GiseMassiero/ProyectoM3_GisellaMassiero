@@ -214,15 +214,31 @@ Esta separación facilita el mantenimiento del proyecto, permite reutilizar func
 
 --- 
 
-también se utilizó la IA para: 
+💡 Importate:
 
-*  Resolución de errores de sintaxis y manejo de promesas en las peticiones fetch al servidor.
-*  Resolución de errores de JavaScript
-*  Optimización del diseño CSS
-*  Documentación y comentarios del proyecto
+En el desarrollo de este proyecto, he utilizado a Gemini (IA de Google) como mi colaborador y mentor de programación. 
 
+Mi objetivo no fue automatizar la creación del proyecto, sino potenciar mi capacidad de resolución de problemas bajo estándares de arquitectura Full Stack profesional.
+
+¿Por qué trabajé de esta manera?
+
+Refinamiento Arquitectónico:
+
+ La IA me ayudó a validar la robustez de mi arquitectura SPA, asegurando una correcta gestión del estado, persistencia de datos y una implementación segura de variables de entorno, garantizando que nunca se expusieran claves de API en el cliente.
+
+Buenas Prácticas de UI/UX: 
+
+Colaboramos para iterar sobre el diseño mobile-first, refinando el uso de Flexbox, la gestión de unidades relativas y la implementación de un sticky footer que mejora la experiencia de usuario sin comprometer la fluidez de la navegación.
+
+
+Debug y Optimización:
+
+ Utilicé la IA como un "pair programmer" para realizar pruebas de código, detectar posibles fugas de memoria y optimizar el rendimiento de las animaciones CSS, asegurando que el despliegue final sea sólido y profesional.
+
+Este proyecto es el resultado de mi capacidad para dirigir herramientas de vanguardia, integrar sus sugerencias de manera crítica y aplicarlas para construir una aplicación funcional, segura y con una UX pulida.
 
 --- 
+
 
 ✨ FUNCIONALIDADES:
 
