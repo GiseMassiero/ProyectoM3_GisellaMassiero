@@ -25,6 +25,7 @@ html, body {
   max-width: 100%;
   height: 100%;
   overflow-x: hidden; /* 🛡️ BLOQUEO CRÍTICO: Prohíbe terminantemente el scroll horizontal */
+  overflow-y: auto;
   position: relative;
 }
 
@@ -55,23 +56,6 @@ body::before {
   pointer-events: none;
   animation: pulseGlow 8s infinite ease-in-out;
 }
-/*body::after {
-  content: "";
-  position: absolute;
-  bottom: -10%;
-  right: -10%;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(255, 208, 0, 0.06) 0%, transparent 70%);
-  z-index: -2;
-  pointer-events: none;
-  animation: pulseGlow 12s infinite ease-in-out alternate;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.2); opacity: 1; }
-}*/
 
 /* ==========================================
    NAVBAR (barra superior fija)
@@ -408,7 +392,8 @@ body::before {
   flex-direction: column;
   padding: 20px;
   background: transparent;
-  min-height: 0; /* NECESARIO: permite que el contenedor se encoja correctamente */
+min-height: 0; /* NECESARIO: permite que el contenedor se encoja correctamente */
+height: 100%;
 }
 
 /* La caja donde se listan los mensajes */
