@@ -48,17 +48,25 @@ La aplicación consume la API de Google Gemini mediante una API REST alojada en 
 
 #  🛠️ REQUISITOS PARA EJECUCIÓN LOCAL: 
 
+*Un consejo importante:
 
 Antes de ejecutar el proyecto es necesario tener instalado:
 
 - Node.js 18 o superior
 - npm
-- Vercel CLI
 
-Instalar Vercel CLI:
+ 🛠️ Configuración inicial:
+Para que vercel dev funcione correctamente, debes tener instalado el CLI globalmente:
 
-* npm install -g vercel
+- npm i -g vercel
+
+Utiliza el CLI de Vercel para emular las funciones serverless:
+
+* vercel dev
   
+* La aplicación estará disponible en http://localhost:3000.
+
+
 --- 
 
 ▶️ Instalación
@@ -84,14 +92,6 @@ GEMINI_API_KEY=tu_clave_aqui
 
 --- 
 
-🌟 EJECUTAR EN ENTORNO DE DESARROLLO:
-
-Utiliza el CLI de Vercel para emular las funciones serverless:
-
-* vercel dev
-* La aplicación estará disponible en http://localhost:3000.
-
----
 
 🧪 EJECUCCIÓN DE TEST:
 
@@ -101,7 +101,8 @@ Para verificar la integridad del código y las respuestas del sistema:
   
 * (Asegúrate de tener configurado tu framework de pruebas como Jest o Vitest).
 
-<img width="713" height="262" alt="Captura de pantalla 2026-07-07 004802" src="https://github.com/user-attachments/assets/0bb4e510-ec81-43ca-89f3-4696c4372c9a" />
+<img width="717" height="312" alt="test" src="https://github.com/user-attachments/assets/ba7b3571-db4e-4294-8ef7-c634776e6aab" />
+
 
 ---
 
@@ -130,6 +131,14 @@ Interfaz de chat funcionando:
 
 <img width="1228" height="784" alt="image" src="https://github.com/user-attachments/assets/b9c0a1f8-c923-4728-9f69-76b1529f12f9" />
 
+
+* Presenta una interfaz adaptable con un diseño responsive enfocado en mobile.first:
+  
+
+  <img width="648" height="916" alt="responsive" src="https://github.com/user-attachments/assets/5acb9803-f057-4da2-987c-e96c96417cd0" />
+
+
+
 ---
 
 🔗 Enlace a la aplicación:
@@ -137,7 +146,8 @@ Interfaz de chat funcionando:
  Haz clic aquí para ver el proyecto desplegado en Vercel
 
 
- 👉   proyecto-m3-gisella-massiero.vercel.app
+ 👉  https://proyecto-m3-gisella-massiero.vercel.app
+ 
 
 ---
 
@@ -176,8 +186,12 @@ Quiero separar el código por responsabilidades (views, router, api, assets y es
  
  └── ...
 
+
 ---
-promts utilizados:  
+
+
+promts utilizados: 
+
 
 "Estoy desarrollando una Single Page Application (SPA) con JavaScript Vanilla y Vite para mi Proyecto Integrador de Soy Henry.
 
@@ -186,7 +200,9 @@ Necesito integrar la API de Google Gemini para que los usuarios puedan conversar
 ¿Podrías explicarme cómo estructurar el módulo encargado de consumir la API, cómo enviar el mensaje del usuario, recibir la respuesta del modelo y manejar posibles errores de conexión o respuestas inválidas?
 También me gustaría conocer buenas prácticas para mantener el código organizado y reutilizable."
 
+
 * respuesta:
+
   
 "Una buena forma de organizar el consumo de la API de Gemini es crear un módulo independiente, por ejemplo api.js, que concentre toda la lógica de comunicación con el servicio. De esta manera, las vistas solo se encargan de capturar la interacción del usuario y mostrar los resultados, mientras que el módulo de la API gestiona las solicitudes.
 
