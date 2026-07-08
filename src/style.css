@@ -688,7 +688,6 @@ body::before {
     max-width: 95%;
   }
 
-  /* 🏎️ CORRECCIÓN S20 ULTRA: Achicamos el h1 para que no empuje la pantalla hacia el costado */
   .home h1, .home-content h1 {
     font-size: 34px; 
     word-wrap: break-word; /* Evita que el texto rígido rompa el contenedor */

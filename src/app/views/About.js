@@ -18,18 +18,18 @@ export function About() {
 
         <p>
           Podés hablar con Mate, Rayo McQueen, Hudson Hornet y Sally.
-          Cada personaje tiene una personalidad distinta.
+          Cada uno programado con una personalidad única.
         </p>
 
         <p>
-          El objetivo del proyecto es practicar:
+          Tecnologías y conceptos aplicados: 
         </p>
 
         <ul>
-          <li>Routing en SPA</li>
-          <li>Estado global</li>
-          <li>Consumo de APIs (Gemini AI)</li>
-          <li>Diseño responsive mobile-first</li>
+          <li>Enrutamiento dinámico y navegación fluida mediante Routing en SPA.</li>
+          <li>Gestión de un estado global para in flujo de datos eficientes.</li>
+          <li>Integración de Inteligencia Artificial consumiendo la API de Gemini AI.</li>
+          <li>Insterfaz adaptable con un diseño responsive enfocado en mobile-first.</li>
         </ul>
 
         <p class="highlight">
