@@ -55,8 +55,7 @@ body::before {
   pointer-events: none;
   animation: pulseGlow 8s infinite ease-in-out;
 }
-
-body::after {
+/*body::after {
   content: "";
   position: absolute;
   bottom: -10%;
@@ -72,7 +71,7 @@ body::after {
 @keyframes pulseGlow {
   0%, 100% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.2); opacity: 1; }
-}
+}*/
 
 /* ==========================================
    NAVBAR (barra superior fija)
@@ -402,23 +401,26 @@ body::after {
    CHAT MAIN (Panel Derecho de Mensajes)
    ========================================== */
 
+/* Panel derecho que contiene la caja de mensajes y el input */
 .chat-main {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background: transparent; 
+  background: transparent;
+  min-height: 0; /* NECESARIO: permite que el contenedor se encoja correctamente */
 }
 
+/* La caja donde se listan los mensajes */
 .chat-box {
-  flex: 1;
-  overflow-y: auto;
+  flex: 1; /* Ocupa todo el espacio disponible */
+  overflow-y: auto; /* Activa el scroll vertical si hay muchos mensajes */
   padding: 10px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end; 
+  flex-direction: column; /* Apila mensajes verticalmente */
+  justify-content: flex-end; /* Pega los mensajes al fondo (abajo) */
   gap: 16px;
-  background: transparent;
+  margin-bottom: 10px;
 }
 
 .chat-box::-webkit-scrollbar {
@@ -800,36 +802,27 @@ body::after {
   border-color: transparent;
   transform: rotate(90deg); 
 }
-/* ==========================================
-   FOOTER (Solo agrega esto al final de tu archivo)
-   ========================================== */
-.main-footer {
-  width: 100%;
-  padding: 2rem;
-  background: rgba(15, 15, 20, 0.95);
-  border-top: 1px solid #333;
-  color: #888;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  text-align: center;
+/* Contenedor que da espacio y centra el footer del About */
+.about-footer {
+    margin-top: 40px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
 }
 
-.main-footer a {
-  color: #ffd000;
-  text-decoration: none;
-  font-weight: bold;
+/* El enlace en amarillo neón */
+.git-link {
+    color: #ffd000 !important; /* El amarillo de Cars */
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block; /* Lo baja a su propia línea */
+    margin-top: 8px;
+    transition: color 0.3s ease;
 }
 
-.main-footer a:hover {
-  text-decoration: underline;
-}
-
-@media (min-width: 768px) {
-  .main-footer {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 2rem 4rem;
-  }
+/* Efecto al pasar el mouse */
+.git-link:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
 }

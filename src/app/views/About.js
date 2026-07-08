@@ -35,8 +35,14 @@ export function About() {
         <p class="highlight">
           “La velocidad no lo es todo… lo importante es el viaje.” ⚡
         </p>
-      </div>
-    </div>
+
+  <div class="about-footer">
+    <p>© 2026 - Proyecto Full Stack - Gisella Massiero</p>
+    <a class="git-link" href="https://github.com/GiseMassiero/ProyectoM3_GisellaMassiero.git" target="_blank" rel="noopener noreferrer">
+       GitHub Repository 🚀
+    </a>
+</div>
+
   `;
 
   // 💡 Dejamos listo el hook por si el router intenta inicializar algo en esta vista

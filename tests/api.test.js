@@ -49,3 +49,51 @@ describe("Pruebas unitarias para el servicio de API (sendMessage)", () => {
     await expect(sendMessage(mockHistory, "sally")).rejects.toThrow("Network Error");
   });
 });
+it("Debe enviar correctamente el historial y el personaje en la petición", async () => {
+  fetch.mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({ reply: "Hola" }),
+  });
+
+  const messages = [
+    { role: "user", text: "Hola" },
+    { role: "assistant", text: "¡Hola!" },
+  ];
+
+  await sendMessage(messages, "hudson");
+
+
+  expect(fetch).toHaveBeenCalledWith(
+    "/api/functions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: messages,
+        character: "hudson",
+      }),
+    }
+  );
+});
+it("Debe devolver todos los datos recibidos del backend", async () => {
+  const apiResponse = {
+    id: "abc123",
+    content: "Hola",
+    usage: {
+      promptTokens: 20,
+      completionTokens: 10,
+    },
+    reply: "Hola",
+  };
+
+  fetch.mockResolvedValueOnce({
+    ok: true,
+    json: async () => apiResponse,
+  });
+
+  const result = await sendMessage([], "mcqueen");
+
+  expect(result).toEqual(apiResponse);
+});
