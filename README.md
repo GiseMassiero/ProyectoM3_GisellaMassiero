@@ -1,6 +1,6 @@
-               🏎️ PROYECTO: CHAT INTERACTIVO "RADIADOR SPRINGS AI"
-
-               ¡Bienvenido al sistema de comunicación de Radiador Springs! 
+                                            🏎️ PROYECTO: CHAT INTERACTIVO "RADIADOR SPRINGS AI"
+ 
+                                        ¡Bienvenido al sistema de comunicación de Radiador Springs! 
 
 Ésta es una aplicación web desarrollada como Proyecto Integrador del Módulo 3.
 
@@ -41,6 +41,57 @@ La aplicación consume la API de Google Gemini mediante una API REST alojada en 
 - Vercel
 - Git
 - GitHub
+
+---
+
+✨ FUNCIONALIDADES:
+
+-Selección de personaje.
+
+-Conversación con IA.
+
+-Personalidades diferentes para cada personaje.
+
+-SPA sin recargar la página.
+
+-Navegación mediante Hash Router.
+
+-Consumo de API REST.
+
+-Variables de entorno protegidas.
+
+- **🎨 Modo Claro / Oscuro:** Incluye un interruptor de interfaz dinámica que adapta la estética visual de la aplicación,
+
+ mejorando la accesibilidad y la comodidad de lectura.
+ 
+
+
+MODO OSCURO (### 🖥️ Vista Desktop)
+
+<img width="1905" height="891" alt="image" src="https://github.com/user-attachments/assets/9dc283dd-45c4-4f36-b953-eadef9eacbab" />
+
+
+
+MODO CLARO:
+
+<img width="1890" height="903" alt="image" src="https://github.com/user-attachments/assets/0fe9e7fb-ca60-45a2-89e6-9e05ac1bcba8" />
+
+
+
+- **Diseño Responsivo:** Interfaz completamente adaptada para dispositivos móviles y de escritorio.
+
+### 📱 Vista Mobile
+  
+
+  <img width="439" height="710" alt="movil" src="https://github.com/user-attachments/assets/7603ce90-8501-45df-a9b0-9781a30da60e" />
+
+
+### 📱 Vista Tablet
+
+
+<img width="607" height="851" alt="Captura de pantalla 2026-07-09 082106" src="https://github.com/user-attachments/assets/f0a213cf-bd6f-466f-8a87-5e6007d75a79" />
+
+
 
 ---
 
@@ -132,12 +183,6 @@ Interfaz de chat funcionando:
 <img width="1228" height="784" alt="image" src="https://github.com/user-attachments/assets/b9c0a1f8-c923-4728-9f69-76b1529f12f9" />
 
 
-* Presenta una interfaz adaptable con un diseño responsive enfocado en mobile.first:
-  
-
-  <img width="648" height="916" alt="responsive" src="https://github.com/user-attachments/assets/5acb9803-f057-4da2-987c-e96c96417cd0" />
-
-
 
 ---
 
@@ -158,6 +203,7 @@ En el desarrollo de este proyecto, se utilizó asistencia de IA (Gemini/ChatGPT)
 --- 
 
 Promts utilizados :
+
 "Estoy desarrollando mi Proyecto Integrador M3 de Soy Henry utilizando JavaScript Vanilla y Vite.
 
 Necesito organizar correctamente la estructura del proyecto siguiendo buenas prácticas para una Single Page Application (SPA).
@@ -236,15 +282,12 @@ En el desarrollo de este proyecto, he utilizado a Gemini (IA de Google) como mi 
 
 Mi objetivo no fue automatizar la creación del proyecto, sino potenciar mi capacidad de resolución de problemas bajo estándares de arquitectura Full Stack profesional.
 
-¿Por qué trabajé de esta manera?
 
-Refinamiento Arquitectónico:
-
- La IA me ayudó a validar la robustez de mi arquitectura SPA, asegurando una correcta gestión del estado, persistencia de datos y una implementación segura de variables de entorno, garantizando que nunca se expusieran claves de API en el cliente.
+La IA me ayudó a validar la robustez de mi arquitectura SPA, asegurando una correcta gestión del estado, persistencia de datos y una implementación segura de variables de entorno, garantizando que nunca se expusieran claves de API en el cliente.
 
 Buenas Prácticas de UI/UX: 
 
-Colaboramos para iterar sobre el diseño mobile-first, refinando el uso de Flexbox, la gestión de unidades relativas y la implementación de un sticky footer que mejora la experiencia de usuario sin comprometer la fluidez de la navegación.
+Colaboró para iterar sobre el diseño mobile-first, refinando el uso de Flexbox, la gestión de unidades relativas y la implementación de un sticky footer que mejora la experiencia de usuario sin comprometer la fluidez de la navegación.
 
 
 Debug y Optimización:
@@ -256,16 +299,7 @@ Este proyecto es el resultado de mi capacidad para dirigir herramientas de vangu
 --- 
 
 
-✨ FUNCIONALIDADES:
 
--Selección de personaje.
--Conversación con IA.
--Personalidades diferentes para cada personaje.
--SPA sin recargar la página.
--Navegación mediante Hash Router.
--Responsive Design.
--Consumo de API REST.
--Variables de entorno protegidas.
 
 👩‍💻 Autor:
 
