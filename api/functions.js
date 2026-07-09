@@ -3,7 +3,7 @@ import { GoogleGenAI } from "@google/genai";
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export default async function handler(req, res) {
-  // 1. Validar método
+ 
   if (req.method !== "POST") {
     return res.status(405).json({ reply: "Method not allowed" });
   }
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
 
     const replyText = response?.text || response?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
 
-    // 2. Creamos la respuesta con el formato del profesor
+   
     const finalResponse = createChatResponse({
       text: replyText,
       payload: formattedContents,
@@ -57,7 +57,7 @@ export default async function handler(req, res) {
       usage: response?.usageMetadata
     });
 
-    // 3. Enviamos el formato nuevo Y MANTENEMOS 'reply' para no romper el frontend
+
     res.status(200).json({ 
       ...finalResponse,
       reply: replyText 
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
   }
 }
 
-// Funciones auxiliares
+
 function mapStopReason(reason) {
   switch (reason) {
     case 'MAX_TOKENS': return 'max_tokens';

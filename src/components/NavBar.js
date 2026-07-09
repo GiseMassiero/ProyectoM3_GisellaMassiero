@@ -8,8 +8,7 @@ export function NavBar() {
   const headerEl = document.createElement("header");
   headerEl.classList.add("navbar");
 
-
-// 2. Inyectamos la estructura usando la variable del import
+  // 2. Inyectamos la estructura usando la variable del import
   headerEl.innerHTML = `
     <div class="navbar-brand">
       <img src="${logoUrl}" alt="Cars AI Chat Logo" class="logo-img">
@@ -17,6 +16,7 @@ export function NavBar() {
     <nav class="links">
       <a href="/home" class="link">Home</a>
       <a href="/about" class="link">About</a>
+      <button id="themeToggle" class="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema claro/oscuro">🌙</button>
     </nav>
   `;
 
@@ -27,7 +27,22 @@ export function NavBar() {
       e.preventDefault(); // Evitamos la recarga nativa del HTML
       const targetPath = link.getAttribute("href");
       navigateTo(targetPath); // Navegamos usando la History API
-    }); // 👈 AQUÍ: Cerraba correctamente la función del evento
+    });
+  });
+
+  // 3.1 Lógica del toggle de tema (claro/oscuro)
+  const themeToggleBtn = headerEl.querySelector("#themeToggle");
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    themeToggleBtn.textContent = "☀️";
+  }
+
+  themeToggleBtn.addEventListener("click", () => {
+    const isLight = document.body.classList.toggle("light-mode");
+    themeToggleBtn.textContent = isLight ? "☀️" : "🌙";
+    localStorage.setItem("theme", isLight ? "light" : "dark");
   });
 
   // 4. Retornamos el nodo para que main.js lo use correctamente
