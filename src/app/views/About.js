@@ -47,7 +47,6 @@ export function About() {
 
   // 💡 Dejamos listo el hook por si el router intenta inicializar algo en esta vista
   function afterRender() {
-    console.log("Vista About cargada");
   }
 
   window.initAbout = afterRender;

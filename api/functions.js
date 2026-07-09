@@ -1,3 +1,7 @@
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
 export default async function handler(req, res) {
   // 1. Validar método
   if (req.method !== "POST") {
@@ -28,36 +32,29 @@ export default async function handler(req, res) {
       parts: [{ text: `INSTRUCCIÓN DE SISTEMA: ${systemInstructionText}. (Responde siempre bajo este rol).` }]
     });
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${process.env.GEMINI_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: formattedContents,
-          generationConfig: {
-            temperature: character?.toLowerCase() === "mate" ? 0.9 : 0.6,
-            maxOutputTokens: 400
-          }
-        })
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Error de API:", JSON.stringify(errorData));
+    let response;
+    try {
+      response = await ai.models.generateContent({
+        model: MODEL_NAME,
+        contents: formattedContents,
+        config: {
+          temperature: character?.toLowerCase() === "mate" ? 0.9 : 0.6,
+          maxOutputTokens: 400
+        }
+      });
+    } catch (apiError) {
+      console.error("Error de API:", apiError);
       return res.status(500).json({ reply: "Fallo de motor en la conexión con el servidor." });
     }
 
-    const data = await response.json();
-    const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
-    
+    const replyText = response?.text || response?.candidates?.[0]?.content?.parts?.[0]?.text || "¡Fallo de motor! No pude responder.";
+
     // 2. Creamos la respuesta con el formato del profesor
     const finalResponse = createChatResponse({
       text: replyText,
       payload: formattedContents,
-      finishReason: data?.candidates?.[0]?.finishReason || 'STOP',
-      usage: data?.usageMetadata
+      finishReason: response?.candidates?.[0]?.finishReason || 'STOP',
+      usage: response?.usageMetadata
     });
 
     // 3. Enviamos el formato nuevo Y MANTENEMOS 'reply' para no romper el frontend

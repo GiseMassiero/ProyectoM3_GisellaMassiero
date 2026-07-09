@@ -36,7 +36,7 @@ La aplicación consume la API de Google Gemini mediante una API REST alojada en 
 - JavaScript
 - Vite
 - SPA (Single Page Application)
-- Hash Router
+- History API
 - Google Gemini API
 - Vercel
 - Git
